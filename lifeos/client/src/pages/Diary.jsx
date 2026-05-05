@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { HiOutlinePlus, HiOutlineTrash, HiOutlinePencil, HiOutlineX, HiOutlinePaperClip } from 'react-icons/hi';
 import toast from 'react-hot-toast';
-import { diaryAPI } from '../api';
+import api, { diaryAPI } from '../api';
 import './Diary.css';
+
+const API_HOST = (import.meta.env.VITE_API_URL || 'http://localhost:5001/api').replace(/\/api$/, '');
 
 const moods = [
   { value: 'amazing', emoji: '🤩', label: 'Amazing', color: 'var(--mood-amazing)' },
@@ -152,7 +154,7 @@ export default function Diary() {
                 {entry.attachments && entry.attachments.length > 0 && (
                   <div className="diary-attachments-preview">
                     {entry.attachments.map((url, i) => {
-                      const fullUrl = `http://localhost:5001${url}`;
+                      const fullUrl = `${API_HOST}${url}`;
                       if (url.match(/\.(jpeg|jpg|gif|png|webp)$/i)) return <img key={i} src={fullUrl} alt="attachment" className="attachment-img" />;
                       if (url.match(/\.(mp4|webm)$/i)) return <video key={i} src={fullUrl} controls className="attachment-video" />;
                       if (url.match(/\.(mp3|wav|ogg)$/i)) return <audio key={i} src={fullUrl} controls className="attachment-audio" />;

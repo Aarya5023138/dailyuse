@@ -6,6 +6,14 @@ const Gamification = require('../models/Gamification');
 // Get all tasks with optional filters
 router.get('/', async (req, res) => {
   try {
+    // Reset completed daily tasks if a new day has started
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    await Task.updateMany(
+      { isDaily: true, status: 'done', completedAt: { $lt: today } },
+      { $set: { status: 'todo', completedAt: null } }
+    );
+
     const { category, status, priority, search } = req.query;
     const filter = {};
     if (category) filter.category = category;
@@ -63,7 +71,37 @@ router.put('/:id', async (req, res) => {
       gamification.totalXP += existing.points;
       gamification.tasksCompleted += 1;
       gamification.calculateLevel();
-      gamification.updateStreak();
+
+      // Check if ALL tasks for today are now completed
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const todayEnd = new Date(todayStart);
+      todayEnd.setDate(todayEnd.getDate() + 1);
+
+      // Count remaining incomplete tasks:
+      // - Daily tasks that are not done
+      // - Non-daily tasks due today that are not done (excluding the one we just completed)
+      const incompleteDailyCount = await Task.countDocuments({
+        _id: { $ne: existing._id },
+        isDaily: true,
+        status: { $ne: 'done' }
+      });
+      const incompleteNonDailyTodayCount = await Task.countDocuments({
+        _id: { $ne: existing._id },
+        isDaily: false,
+        status: { $ne: 'done' },
+        dueDate: { $gte: todayStart, $lt: todayEnd }
+      });
+
+      const allTasksDone = (incompleteDailyCount + incompleteNonDailyTodayCount) === 0;
+
+      if (allTasksDone) {
+        // All tasks for today are done — advance the streak
+        gamification.markAllTasksCompleted();
+      } else {
+        // Not all tasks done yet — just record activity
+        gamification.recordActivity();
+      }
 
       // Check achievements
       const achievementChecks = [

@@ -8,7 +8,19 @@ router.get('/', async (req, res) => {
     let stats = await Gamification.findOne();
     if (!stats) {
       stats = await new Gamification().save();
+    } else if (stats.lastCompletedAllDate) {
+      // Dynamically check if streak is broken (more than 1 day passed without completing all tasks)
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const lastCompletedStart = new Date(stats.lastCompletedAllDate.getFullYear(), stats.lastCompletedAllDate.getMonth(), stats.lastCompletedAllDate.getDate());
+      
+      const diffDays = Math.round((todayStart - lastCompletedStart) / (1000 * 60 * 60 * 24));
+      if (diffDays > 1 && stats.currentStreak > 0) {
+        stats.currentStreak = 0;
+        await stats.save();
+      }
     }
+
     const xpForNextLevel = (stats.level) * 100;
     const currentLevelXP = stats.totalXP - ((stats.level - 1) * 100);
     res.json({

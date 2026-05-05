@@ -1,55 +1,106 @@
-# Welcome to LifeOS! 🌟
+# LifeOS 🌟
 
-LifeOS is an easy-to-use application built to help you organize your daily routine, track your goals, manage your tasks, and maintain a personal diary!
+A beautiful, full-featured productivity suite to organize your daily life — track tasks, goals, habits, diary entries, reminders, and more with gamification!
 
----
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite)
+![Express](https://img.shields.io/badge/Express-4-000000?logo=express)
+![MongoDB](https://img.shields.io/badge/MongoDB-8-47A248?logo=mongodb)
 
-## 🛠️ Step-by-Step Guide to Run LifeOS
+## ✨ Features
 
-Because LifeOS uses a Backend Server (to save your data securely) and a Frontend Client (to show you the beautiful interface), you just need to start them both. Don't worry, it's super easy!
+- **Dashboard** — Overview of your productivity stats at a glance
+- **Tasks** — Create, manage, and track daily tasks with priorities
+- **Goals** — Set and track long-term goals with progress
+- **Habits** — Build and maintain positive habits with streak tracking
+- **Calendar** — Visual calendar with event management
+- **Diary** — Journal entries with mood tracking and attachments
+- **Reminders** — Never miss important events with recurring reminders
+- **Notes** — Quick notes for capturing ideas
+- **Gamification** — XP, levels, and streaks to keep you motivated
+- **Settings** — Customizable accent colors and preferences
 
-### Step 1: Start the Backend (The Brain 🧠)
-This step turns on the server where all your goals and tasks will be saved.
+## 🛠️ Tech Stack
 
-1. Open your computer's terminal (or command prompt).
-2. Go into the backend folder by typing this exact command and pressing Enter:
-   ```bash
-   cd server
-   ```
-3. Install the needed background files (you only need to do this your very first time):
-   ```bash
-   npm install
-   ```
-4. Finally, turn the server on by typing:
-   ```bash
-   npm run dev
-   ```
-*(You should see a message saying "LifeOS server running". Keep this terminal open!)*
-
-### Step 2: Start the Frontend (The Beautiful UI ✨)
-Now, we need to turn on the actual visual app.
-
-1. Open a **second, brand new** terminal (or command prompt).
-2. Go into the frontend folder by typing:
-   ```bash
-   cd client
-   ```
-3. Just like before, install the visual files (first time only):
-   ```bash
-   npm install
-   ```
-4. Start up the app by typing:
-   ```bash
-   npm run dev
-   ```
+| Layer    | Technology              |
+|----------|------------------------|
+| Frontend | React 19, Vite 8       |
+| Backend  | Express.js, Node.js    |
+| Database | MongoDB / In-Memory DB |
+| Styling  | Custom CSS (Dark Mode) |
 
 ---
 
-## 🎉 Step 3: Open the App!
-You're completely ready! The application is now running safely on your computer. 
+## 🚀 Getting Started (Local Development)
 
-Open your favorite web browser (like Chrome or Microsoft Edge) and click or type in this exact link:
+### Prerequisites
+- [Node.js](https://nodejs.org/) v18+
+- [MongoDB](https://www.mongodb.com/) (optional — falls back to in-memory DB)
 
-👉 **[http://localhost:5173/](http://localhost:5173/)**
+### Step 1: Clone the repo
+```bash
+git clone https://github.com/Aarya5023138/LifeOs.git
+cd LifeOs
+```
 
-**Enjoy getting organized!**
+### Step 2: Start the Backend 🧠
+```bash
+cd server
+npm install
+npm run dev
+```
+> You should see "LifeOS server running". Keep this terminal open!
+
+### Step 3: Start the Frontend ✨
+Open a **new terminal**:
+```bash
+cd client
+npm install
+npm run dev
+```
+
+### Step 4: Open the App! 🎉
+Visit **[http://localhost:5173/](http://localhost:5173/)** in your browser.
+
+---
+
+## 🌐 Deployment
+
+### Frontend (Vercel)
+1. Import this repo in [Vercel](https://vercel.com)
+2. Set the following in Vercel project settings:
+   - **Build Command**: `cd client && npm install && npm run build`
+   - **Output Directory**: `client/dist`
+3. Add environment variable:
+   - `VITE_API_URL` = your deployed backend URL (e.g. `https://your-api.onrender.com/api`)
+
+### Backend (Render / Railway)
+1. Deploy the `server/` directory to [Render](https://render.com) or [Railway](https://railway.app)
+2. Set environment variables:
+   - `PORT` = `5001`
+   - `MONGODB_URI` = your MongoDB Atlas connection string
+
+---
+
+## 📁 Project Structure
+```
+lifeos/
+├── client/          # React frontend (Vite)
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── api.js
+│   │   └── App.jsx
+│   └── package.json
+├── server/          # Express backend
+│   ├── models/
+│   ├── routes/
+│   ├── utils/
+│   └── package.json
+├── vercel.json      # Vercel deployment config
+└── README.md
+```
+
+## 📄 License
+
+This project is for personal/educational use.

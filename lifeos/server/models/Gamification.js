@@ -6,6 +6,7 @@ const gamificationSchema = new mongoose.Schema({
   currentStreak: { type: Number, default: 0 },
   longestStreak: { type: Number, default: 0 },
   lastActiveDate: { type: Date },
+  lastCompletedAllDate: { type: Date }, // Date when all tasks were last completed for a day
   tasksCompleted: { type: Number, default: 0 },
   diaryEntries: { type: Number, default: 0 },
   achievements: [{
@@ -22,28 +23,52 @@ gamificationSchema.methods.calculateLevel = function() {
   return this.level;
 };
 
-// Check and update streak
-gamificationSchema.methods.updateStreak = function() {
+// Mark that all tasks for today are completed and update streak accordingly
+// Called when every task for the current day has been finished
+gamificationSchema.methods.markAllTasksCompleted = function() {
   const now = new Date();
-  const lastActive = this.lastActiveDate ? new Date(this.lastActiveDate) : null;
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const lastCompleted = this.lastCompletedAllDate ? new Date(this.lastCompletedAllDate) : null;
   
-  if (!lastActive) {
+  // Check if we already recorded all-tasks-completed for today
+  if (lastCompleted) {
+    const lastCompletedStart = new Date(lastCompleted.getFullYear(), lastCompleted.getMonth(), lastCompleted.getDate());
+    if (lastCompletedStart.getTime() === todayStart.getTime()) {
+      // Already counted today, don't double-increment
+      return this.currentStreak;
+    }
+  }
+
+  // Determine if the streak continues or resets
+  if (!lastCompleted) {
+    // First time completing all tasks
     this.currentStreak = 1;
   } else {
-    const diffDays = Math.floor((now - lastActive) / (1000 * 60 * 60 * 24));
+    const lastCompletedStart = new Date(lastCompleted.getFullYear(), lastCompleted.getMonth(), lastCompleted.getDate());
+    const diffDays = Math.round((todayStart - lastCompletedStart) / (1000 * 60 * 60 * 24));
+    
     if (diffDays === 1) {
+      // Consecutive day — streak continues
       this.currentStreak += 1;
     } else if (diffDays > 1) {
+      // Gap in completion — streak resets
       this.currentStreak = 1;
     }
+    // diffDays === 0 is handled above (already counted today)
   }
   
   if (this.currentStreak > this.longestStreak) {
     this.longestStreak = this.currentStreak;
   }
   
+  this.lastCompletedAllDate = now;
   this.lastActiveDate = now;
   return this.currentStreak;
+};
+
+// Record activity without changing streak (for partial task completions)
+gamificationSchema.methods.recordActivity = function() {
+  this.lastActiveDate = new Date();
 };
 
 module.exports = mongoose.model('Gamification', gamificationSchema);
