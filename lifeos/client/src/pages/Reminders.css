@@ -1,7 +1,67 @@
+/* ── Page wrapper ─────────────────────────────────────────────────────────── */
 .reminders-page {
   animation: fadeIn 0.5s ease;
 }
 
+/* ── Header actions ───────────────────────────────────────────────────────── */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-notif-enable {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 193, 7, 0.12);
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  color: #ffc107;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-notif-enable:hover {
+  background: rgba(255, 193, 7, 0.22);
+}
+
+/* ── Test alarm button ───────────────────────────────────────────────────── */
+.btn-test-alarm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(108, 92, 231, 0.12);
+  border: 1px solid rgba(108, 92, 231, 0.35);
+  color: var(--accent-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-test-alarm:hover {
+  background: rgba(108, 92, 231, 0.25);
+  border-color: var(--accent-primary);
+  transform: scale(1.03);
+}
+
+/* ── Notification permission banner ──────────────────────────────────────── */
+.notif-banner {
+  background: rgba(255, 193, 7, 0.08);
+  border: 1px solid rgba(255, 193, 7, 0.25);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  font-size: 0.82rem;
+  color: #e6b800;
+  margin-bottom: 20px;
+}
+
+/* ── Section ──────────────────────────────────────────────────────────────── */
 .reminder-section {
   margin-bottom: 32px;
 }
@@ -19,12 +79,14 @@
   color: var(--text-muted);
 }
 
+/* ── List ─────────────────────────────────────────────────────────────────── */
 .reminder-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+/* ── Card ─────────────────────────────────────────────────────────────────── */
 .reminder-card {
   display: flex;
   align-items: center;
@@ -33,10 +95,9 @@
   animation: fadeIn 0.3s ease backwards;
 }
 
-.reminder-card.past {
-  opacity: 0.5;
-}
+.reminder-card.past { opacity: 0.5; }
 
+/* ── Bell icon ────────────────────────────────────────────────────────────── */
 .reminder-bell {
   width: 44px;
   height: 44px;
@@ -59,9 +120,8 @@
   color: var(--text-muted);
 }
 
-.reminder-info {
-  flex: 1;
-}
+/* ── Info ─────────────────────────────────────────────────────────────────── */
+.reminder-info { flex: 1; }
 
 .reminder-info h4 {
   font-size: 0.9rem;
@@ -105,6 +165,7 @@
   font-weight: 600;
 }
 
+/* ── Actions ──────────────────────────────────────────────────────────────── */
 .reminder-actions {
   display: flex;
   gap: 4px;
@@ -112,11 +173,45 @@
   transition: opacity var(--transition-fast);
 }
 
-.reminder-card:hover .reminder-actions {
-  opacity: 1;
+.reminder-card:hover .reminder-actions { opacity: 1; }
+
+/* ── Repeat chip grid ─────────────────────────────────────────────────────── */
+.repeat-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
 }
 
+.repeat-chip {
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.repeat-chip:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  background: rgba(108, 92, 231, 0.08);
+}
+
+.repeat-chip.active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(108, 92, 231, 0.35);
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .reminder-card { flex-wrap: wrap; }
+  .reminder-card    { flex-wrap: wrap; }
   .reminder-actions { opacity: 1; }
+  .header-actions   { flex-direction: column; align-items: flex-start; }
+  .reminder-alert-box { padding: 28px 24px; }
 }
